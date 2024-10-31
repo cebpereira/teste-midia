@@ -1,0 +1,36 @@
+services:
+
+  apache:
+    container_name: teste-midia-site
+    build: ./docker/.
+    volumes:
+      - .:/var/www/html/teste-midia
+    restart: always
+    ports:
+      - 80:80
+    networks:
+      - teste-midia-network
+    depends_on:
+      - mysql_db
+
+  mysql_db:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: mysql-db
+    ports:
+      - 3306:3306
+    networks:
+      - teste-midia-network
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    ports:
+      - 8080:80
+    environment:
+      - PMA_ARBITRARY=1
+    networks:
+      - teste-midia-network
+
+networks:
+  teste-midia-network: {}
