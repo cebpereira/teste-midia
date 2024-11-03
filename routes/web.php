@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\DocumentController;
-use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Web\DocumentController;
+use App\Http\Controllers\Web\DashboardController;
+use App\Http\Controllers\Web\LoginController;
+use App\Http\Controllers\Web\RegisterController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -16,25 +18,28 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware(['auth']);
+Route::get('/login', [LoginController::class, 'index'])->name("login");
+Route::post("/login", [LoginController::class, "login"])->name("post.login");
+
+Route::get("/register", [RegisterController::class, "index"])->name("register");
 
 // Routes for authenticated users
-Route::middleware('auth')->group(function () {
+Route::middleware('auth:sanctum')->group(function () {
+    // Routes for dashboard
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get("/logout", [LoginController::class, "logout"])->name("logout");
+
     // Routes for profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // Routes for documents pages
-    Route::get('/documents', [DocumentController::class, 'index'])->name('documents.index');
     Route::get('/documents/create', [DocumentController::class, 'create'])->name('documents.create');
     Route::get('/documents/{id}', [DocumentController::class, 'show'])->name('documents.show');
     Route::get('/documents/{id}/edit', [DocumentController::class, 'edit'])->name('documents.edit');
-
-    // Routes for documents actions
-    Route::post('/documents', [DocumentController::class, 'store'])->name('documents.store');
-    Route::put('/documents/{id}', [DocumentController::class, 'update'])->name('documents.update');
-    Route::delete('/documents/{id}', [DocumentController::class, 'destroy'])->name('documents.destroy');
 });
 
-require __DIR__ . '/auth.php';
+Route::fallback(function () {
+    return redirect()->route('dashboard');
+});
