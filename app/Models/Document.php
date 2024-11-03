@@ -20,6 +20,20 @@ class Document extends Model
         'title',
         'content',
         'user_id',
+        'user_name',
+        'user_role',
+        'user_document',
+        'product_brand',
+        'product_model',
+        'product_serial_number',
+        'product_processor',
+        'product_memory',
+        'product_disk',
+        'product_price',
+        'product_price_string',
+        'local',
+        'date',
+        'file_path'
     ];
 
     /**
