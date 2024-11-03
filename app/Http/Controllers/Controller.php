@@ -9,12 +9,12 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Auth;
 
-abstract class Controller
+class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
 
     /**
-     * @var JsonResponse $responso
+     * @var JsonResponse $response
      */
     protected $response;
 

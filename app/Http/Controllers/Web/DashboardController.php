@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web;
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Inertia\Inertia;
 
 class DashboardController extends Controller
@@ -11,7 +11,7 @@ class DashboardController extends Controller
     {
         $user = $this->getUser();
 
-        $documents = $user->documents()->get();
+        $documents = $user->documents()->get()->only(['document_id', 'title', 'user_name', 'user_role', 'product_brand', 'file_path']);
 
         return Inertia::render('Dashboard', [
             'documents' => $documents,
