@@ -12,7 +12,7 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.post("/documents");
+    form.post("/api/documents/store");
 };
 </script>
 
