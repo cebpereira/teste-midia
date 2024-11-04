@@ -4,6 +4,7 @@ import { Head, Link } from "@inertiajs/vue3";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import ConfirmDeleteModal from "@/Components/ConfirmDeleteModal.vue";
 import { ref, onMounted } from "vue";
+import Footer from "@/Components/Footer.vue";
 import axios from "@/axios";
 
 const documents = ref([]);
@@ -223,7 +224,9 @@ onMounted(() => {
                     </div>
                 </div>
             </div>
+
         </div>
+        <Footer />
 
         <!-- Modal de Confirmação de Exclusão -->
         <ConfirmDeleteModal
