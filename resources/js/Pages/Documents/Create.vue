@@ -2,11 +2,13 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import DocumentForm from "@/Pages/Documents/DocumentForm.vue";
 import Footer from "@/Components/Footer.vue";
+import { Head } from "@inertiajs/vue3";
 </script>
 
 <template>
+    <Head title="Novo Documento" />
+
     <AuthenticatedLayout>
-        <Head title="Dashboard" />
 
         <template #header>
             <h2

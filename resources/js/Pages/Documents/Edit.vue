@@ -4,6 +4,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { useRoute } from "vue-router";
 import DocumentForm from "@/Pages/Documents/DocumentForm.vue";
 import axios from "@/axios";
+import { Head } from "@inertiajs/vue3";
 
 const route = useRoute();
 const documentData = ref(null);
@@ -19,8 +20,9 @@ onMounted(async () => {
 </script>
 
 <template>
+    <Head title="Editar Documento" />
+
     <AuthenticatedLayout>
-        <Head title="Dashboard" />
 
         <template #header>
             <h2
