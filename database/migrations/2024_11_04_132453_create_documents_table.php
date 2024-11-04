@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('documents', function (Blueprint $table) {
             $table->id('document_id');
             $table->uuid('user_id');
+            $table->string('title');
             $table->string('user_name');
             $table->string('user_role');
             $table->string('user_document');
