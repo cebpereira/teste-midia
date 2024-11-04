@@ -9,4 +9,5 @@ Route::controller(DocumentController::class)->group(function () {
     Route::get('/find', 'find');
     Route::put('/update/{id}', 'update');
     Route::delete('/delete/{id}', 'delete');
+    Route::get('/download/{id}', 'download');
 });

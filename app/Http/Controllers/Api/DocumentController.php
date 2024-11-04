@@ -133,6 +133,8 @@ class DocumentController extends Controller
             throw_if(!$document, 'Documento não encontrado.');
 
             $document->delete();
+
+            return response()->json(['message' => 'Documento excluído com sucesso'], 200);
         } catch (\Exception $e) {
             $this->response->setData([
                 "error" => "Erro ao deletar o documento.",

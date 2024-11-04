@@ -22,7 +22,7 @@ class DocumentController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Documents/DocumentForm', [
+        return Inertia::render('Documents/Create', [
             'documentData' => null
         ]);
     }
@@ -54,7 +54,7 @@ class DocumentController extends Controller
 
         throw_if(!$document, 'Document não encontrado.');
 
-        return Inertia::render('Documents/DocumentForm', [
+        return Inertia::render('Documents/Edit', [
             'documentData' => $document
         ]);
     }
