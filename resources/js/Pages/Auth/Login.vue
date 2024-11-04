@@ -24,15 +24,15 @@ const form = useForm({
 
 const submit = async () => {
     try {
-        const response = await axios.post("/api/auth/login", form);
+        const apiResponse = await axios.post("/api/auth/login", form);
 
-        const token = response.data.token;
+        const token = apiResponse.data.token;
 
         sessionStorage.setItem('auth_token', token);
 
         axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
-        router.get("/dashboard");
+        const webResponse = await axios.post("/login", form);
     } catch (error) {
         console.error("Erro ao realizar login:", error);
     }

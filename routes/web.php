@@ -8,6 +8,7 @@ use App\Http\Controllers\Web\RegisterController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -18,8 +19,11 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/login', [LoginController::class, 'index'])->name("login");
-Route::post("/login", [LoginController::class, "login"])->name("post.login");
+Route::get('login', [AuthenticatedSessionController::class, 'create'])
+    ->name('login');
+
+Route::post('login', [AuthenticatedSessionController::class, 'store']);
+
 
 Route::get("/register", [RegisterController::class, "index"])->name("register");
 
