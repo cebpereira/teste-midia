@@ -33,6 +33,8 @@ const submit = async () => {
         axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
         const webResponse = await axios.post("/login", form);
+
+        router.get("/dashboard");
     } catch (error) {
         console.error("Erro ao realizar login:", error);
     }
