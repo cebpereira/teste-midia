@@ -1,28 +1,26 @@
 <script setup>
+import { ref, onMounted } from "vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
-import InputLabel from "@/Components/InputLabel.vue";
-import TextInput from "@/Components/TextInput.vue";
-import InputError from "@/Components/InputError.vue";
-import { Head, useForm } from "@inertiajs/vue3";
+import { useRoute } from "vue-router";
+import DocumentForm from "@/Pages/Documents/DocumentForm.vue";
+import axios from "@/axios";
 
-defineProps({
-    document: Object,
+const route = useRoute();
+const documentData = ref(null);
+
+onMounted(async () => {
+    try {
+        const response = await axios.get(`/api/documents/${route.params.id}`);
+        documentData.value = response.data;
+    } catch (error) {
+        console.error("Erro ao buscar documento:", error);
+    }
 });
-
-const form = useForm({
-    title: document.title,
-    content: document.content,
-});
-
-const submit = () => {
-    form.put(`/documents/${document.id}`);
-};
 </script>
 
 <template>
     <AuthenticatedLayout>
-        <Head title="Editar Documento" />
+        <Head title="Dashboard" />
 
         <template #header>
             <h2
@@ -31,52 +29,9 @@ const submit = () => {
                 Editar Documento
             </h2>
         </template>
-
-        <div class="py-12">
-            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                <div
-                    class="bg-white dark:bg-gray-800 shadow-sm sm:rounded-lg overflow-hidden"
-                >
-                    <div
-                        class="p-6 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700"
-                    >
-                        <form @submit.prevent="submit">
-                            <div>
-                                <InputLabel for="title" value="Título" />
-                                <TextInput
-                                    id="title"
-                                    v-model="form.title"
-                                    class="block w-full mt-1"
-                                    required
-                                />
-                                <InputError
-                                    :message="form.errors.title"
-                                    class="mt-2"
-                                />
-                            </div>
-
-                            <div class="mt-4">
-                                <InputLabel for="content" value="Conteúdo" />
-                                <textarea
-                                    id="content"
-                                    v-model="form.content"
-                                    class="block w-full mt-1 rounded-md shadow-sm border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300"
-                                ></textarea>
-                                <InputError
-                                    :message="form.errors.content"
-                                    class="mt-2"
-                                />
-                            </div>
-
-                            <div class="mt-4">
-                                <PrimaryButton :disabled="form.processing"
-                                    >Atualizar Documento</PrimaryButton
-                                >
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
+        <div v-if="documentData">
+            <DocumentForm :documentData="documentData" :isEdit="true" />
         </div>
+        <div v-else>Carregando...</div>
     </AuthenticatedLayout>
 </template>
