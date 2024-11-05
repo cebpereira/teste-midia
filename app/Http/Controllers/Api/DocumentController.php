@@ -77,7 +77,7 @@ class DocumentController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \App\Helpers\ApiResponse
      */
-    public function find(Request $request)
+    public function find()
     {
         try {
 
