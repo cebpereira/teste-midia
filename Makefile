@@ -4,6 +4,7 @@ setup:
 	@make composer-update
 	@make data
     @make key
+    @make link
 
 build:
 	docker-compose build --no-cache --force-rm
@@ -23,3 +24,6 @@ data:
 
 key:
 	docker exec teste-midia-site bash -c "php artisan key:generate"
+
+link:
+	docker exec teste-midia-site bash -c "php artisan storage:link"
