@@ -25,33 +25,55 @@ Construção de sistema web como parte do teste técnico para a vaga de Desenvol
 * laravel/pail: ^1.2
 * laravel/pulse: ^1.2
 * laravel/tinker: ^2.8
+* barryvdh/laravel-dompdf: ^3.0,
+* inertiajs/inertia-laravel: ^1.0,
+* laravel/sanctum: ^4.0,
+* phpoffice/phpword: ^1.3,
+* tightenco/ziggy: ^2.0
+
+---
+
+#### Dependências Package:
+* inertiajs/vue3: ^1.0.0,
+* tailwindcss/forms: ^0.5.3,
+* vitejs/plugin-vue: ^5.0.0,
+* vue/server-renderer: ^3.4.0,
+* autoprefixer: ^10.4.12,
+* axios: ^1.7.7,
+* concurrently: ^9.0.1,
+* laravel-vite-plugin: ^1.0,
+* postcss: ^8.4.31,
+* tailwindcss: ^3.2.1,
+* vite: ^5.0,
+* vue: ^3.4.0
 
 ---
 
 #### Configuração e execução do projeto
 * Clonar o repositório atual para sua máquina local:
-
     `git clone https://github.com/cebpereira/teste-midia`
 
 * Navegar para a pasta do projeto:
-
     `cd teste-midia`
 
 * Copiar e configurar o .env:
-
     `cp .env.example .env`
-
-* Executar o comando abaixo no terminal:
-
-    `make setup`
 
 * Aguarde a execução do comando terminar, em caso de sucesso, os containers estarão ativos e o projeto estará rodando via localhost nas seguintes portas:
     * 8080 -> PhpMyAdmin
     * 3306 -> MySQL
     * 80 -> Apache
 
-* Para gerar a app_key:
-    * No terminal de comando execute `make key`
+* No terminal de comando execute o `make setup` para executar todos os comandos de configuração:
+ 
+* Utilize o comando abaixo no terminal do linux ou do WSL para entrar no terminal do apache:
+    * `docker exec -it teste-midia-site bash`
+    
+* Dentro do container do apache, execute os comandos para instalar as dependências necessárias:
+    * `npm install`
+    
+* Após isso, utilize o comando abaixo para buildar:
+    * `npm run build`
  
 * A rota inicial do projeto é a localhost
 
