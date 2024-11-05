@@ -16,27 +16,32 @@ const props = defineProps({
 
                 <!-- Dados do Usuário -->
                 <div class="mb-8">
-                    <h4
-                        class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-300"
-                    >
-                        Dados do Usuário
-                    </h4>
+                    <div class="flex items-center my-8">
+                        <h4
+                            class="mr-4 text-lg font-semibold text-gray-900 dark:text-gray-100"
+                        >
+                            Dados do Usuário
+                        </h4>
+                        <hr
+                            class="flex-grow border-t border-gray-300 dark:border-gray-700"
+                        />
+                    </div>
                     <div class="space-y-2">
-                        <p>
+                        <p class="dark:text-gray-300">
                             <span
                                 class="font-medium text-gray-700 dark:text-gray-400"
                                 >Nome:</span
                             >
                             {{ props.documentData.user_name }}
                         </p>
-                        <p>
+                        <p class="dark:text-gray-300">
                             <span
                                 class="font-medium text-gray-700 dark:text-gray-400"
                                 >Cargo:</span
                             >
                             {{ props.documentData.user_role }}
                         </p>
-                        <p>
+                        <p class="dark:text-gray-300">
                             <span
                                 class="font-medium text-gray-700 dark:text-gray-400"
                                 >Documento:</span
@@ -48,62 +53,67 @@ const props = defineProps({
 
                 <!-- Dados do Produto -->
                 <div class="mb-8">
-                    <h4
-                        class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-300"
-                    >
-                        Dados do Produto
-                    </h4>
+                    <div class="flex items-center my-8">
+                        <h4
+                            class="mr-4 text-lg font-semibold text-gray-900 dark:text-gray-100"
+                        >
+                            Dados do Produto
+                        </h4>
+                        <hr
+                            class="flex-grow border-t border-gray-300 dark:border-gray-700"
+                        />
+                    </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <p>
+                        <p class="dark:text-gray-300">
                             <span
                                 class="font-medium text-gray-700 dark:text-gray-400"
                                 >Marca:</span
                             >
                             {{ props.documentData.product_brand }}
                         </p>
-                        <p>
+                        <p class="dark:text-gray-300">
                             <span
                                 class="font-medium text-gray-700 dark:text-gray-400"
                                 >Modelo:</span
                             >
                             {{ props.documentData.product_model }}
                         </p>
-                        <p>
+                        <p class="dark:text-gray-300">
                             <span
                                 class="font-medium text-gray-700 dark:text-gray-400"
                                 >Número de Série:</span
                             >
                             {{ props.documentData.product_serial_number }}
                         </p>
-                        <p>
+                        <p class="dark:text-gray-300">
                             <span
                                 class="font-medium text-gray-700 dark:text-gray-400"
                                 >Processador:</span
                             >
                             {{ props.documentData.product_processor }}
                         </p>
-                        <p>
+                        <p class="dark:text-gray-300">
                             <span
                                 class="font-medium text-gray-700 dark:text-gray-400"
                                 >Memória:</span
                             >
                             {{ props.documentData.product_memory }}
                         </p>
-                        <p>
+                        <p class="dark:text-gray-300">
                             <span
                                 class="font-medium text-gray-700 dark:text-gray-400"
                                 >Armazenamento:</span
                             >
                             {{ props.documentData.product_disk }}
                         </p>
-                        <p>
+                        <p class="dark:text-gray-300">
                             <span
                                 class="font-medium text-gray-700 dark:text-gray-400"
                                 >Preço (R$):</span
                             >
                             {{ props.documentData.product_price }}
                         </p>
-                        <p>
+                        <p class="dark:text-gray-300">
                             <span
                                 class="font-medium text-gray-700 dark:text-gray-400"
                                 >Preço por Extenso:</span
@@ -113,21 +123,43 @@ const props = defineProps({
                     </div>
                 </div>
 
+                <!-- Acessórios e Periféricos -->
+                <div>
+                    <div class="flex items-center my-8">
+                        <h4
+                            class="mr-4 text-lg font-semibold text-gray-900 dark:text-gray-100"
+                        >
+                            Acessórios e Periféricos
+                        </h4>
+                        <hr
+                            class="flex-grow border-t border-gray-300 dark:border-gray-700"
+                        />
+                    </div>
+                    <p class="dark:text-gray-300">
+                        {{ props.documentData.observations }}
+                    </p>
+                </div>
+
                 <!-- Outros Dados -->
                 <div>
-                    <h4
-                        class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-300"
-                    >
-                        Outros Dados
-                    </h4>
-                    <p>
+                    <div class="flex items-center my-8">
+                        <h4
+                            class="mr-4 text-lg font-semibold text-gray-900 dark:text-gray-100"
+                        >
+                            Outros Dados
+                        </h4>
+                        <hr
+                            class="flex-grow border-t border-gray-300 dark:border-gray-700"
+                        />
+                    </div>
+                    <p class="dark:text-gray-300">
                         <span
                             class="font-medium text-gray-700 dark:text-gray-400"
                             >Local:</span
                         >
                         {{ props.documentData.local }}
                     </p>
-                    <p>
+                    <p class="dark:text-gray-300">
                         <span
                             class="font-medium text-gray-700 dark:text-gray-400"
                             >Data:</span

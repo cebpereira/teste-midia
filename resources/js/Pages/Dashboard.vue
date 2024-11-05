@@ -237,7 +237,7 @@ onMounted(() => {
                                             >
                                                 Excluir
                                             </button>
-                                            <button
+                                            <!-- <button
                                                 @click="
                                                     downloadDocument(
                                                         document.document_id,
@@ -247,7 +247,7 @@ onMounted(() => {
                                                 class="text-green-500 hover:underline"
                                             >
                                                 PDF
-                                            </button>
+                                            </button> -->
                                             <button
                                                 @click="
                                                     downloadDocument(
