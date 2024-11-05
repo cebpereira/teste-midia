@@ -1,36 +1,31 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
-import { Head, Link } from "@inertiajs/vue3";
+import DocumentView from "@/Components/DocumentView.vue";
+import ButtonBackDashboard from "@/Components/ButtonBackDashboard.vue";
+import Footer from "@/Components/Footer.vue";
+import { Head } from "@inertiajs/vue3";
 
-defineProps({
-    document: Object,
+const props = defineProps({
+    documentData: Object,
 });
 </script>
 
 <template>
     <AuthenticatedLayout>
+        <Head title="Visualizar Documento" />
         <template #header>
-            <h2
-                class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200"
-            >
-                Visualizar Documento
-            </h2>
+            <div class="flex justify-start">
+                <ButtonBackDashboard />
+                <h2
+                    class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200 ml-2"
+                >
+                    Visualizar Documento
+                </h2>
+            </div>
         </template>
 
-        <div class="py-12">
-            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                <div
-                    class="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800"
-                >
-                    <div class="p-6 text-gray-900 dark:text-gray-100">
-                        <h3 class="text-lg font-semibold">
-                            {{ document.title }}
-                        </h3>
-                        <p class="mt-4">{{ document.content }}</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <DocumentView :documentData="documentData" />
+
+        <Footer />
     </AuthenticatedLayout>
 </template>

@@ -18,9 +18,6 @@ if (!axios.defaults.headers.common["Accept"]) {
 
 const auth_token = sessionStorage.getItem('auth_token');
 
-console.log('Token: ', token);
-console.log('AuthToken: ', auth_token);
-
 if (auth_token) {
     axios.defaults.headers.common['Authorization'] = `Bearer ${auth_token}`;
 }

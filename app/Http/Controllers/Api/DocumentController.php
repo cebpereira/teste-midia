@@ -11,6 +11,9 @@ use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpWord\IOFactory;
 use PhpOffice\PhpWord\PhpWord;
 use PhpOffice\PhpWord\Shared\Html;
+use PhpOffice\PhpWord\TemplateProcessor;
+use Illuminate\Support\Facades\Response;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class DocumentController extends Controller
 {
@@ -21,12 +24,16 @@ class DocumentController extends Controller
     {
         try {
             $data = $request->data();
+            $data['file_path'] = null;
 
-            $filePath = $this->createDocument($data);
+            $document = Document::create($data);
 
-            $document = Document::create(array_merge($data, ['file_path' => $filePath]));
+            throw_if(
+                !$document,
+                'Não foi possível criar o documento.',
+            );
 
-            return response()->json(['message' => 'Documento criado com sucesso!', 'file' => $filePath, 'data' => $document]);
+            return response()->json(['message' => 'Documento criado com sucesso!', 'data' => $document]);
         } catch (\Exception $e) {
             return response()->json([
                 "error" => "Erro ao criar o documento.",
@@ -73,11 +80,10 @@ class DocumentController extends Controller
     public function find(Request $request)
     {
         try {
-            $query = new QueryHelper();
 
-            $inputs = $request->input();
+            $user = $this->getUser();
 
-            $documents = $query($inputs, Document::class);
+            $documents = $user->documents()->get();
 
             throw_if(
                 !$documents,
@@ -101,15 +107,16 @@ class DocumentController extends Controller
     public function update(DocumentRequest $request, string $id)
     {
         try {
-            $data = $request->validated();
+            $data = $request->data();
 
-            $document = Document::findOrFail($id);
+            $user = $this->getUser();
 
-            $templateContent = Storage::get($document->file_path);
+            $document = $user->documents()->find($id);
 
-            $content = $this->replaceVariables($templateContent, $data);
-
-            Storage::put($document->file_path, $content);
+            throw_if(
+                !$document,
+                'Documento não encontrado.'
+            );
 
             $document->update($data);
 
@@ -128,9 +135,14 @@ class DocumentController extends Controller
     public function delete(string $id)
     {
         try {
-            $document = Document::find($id);
+            $user = $this->getUser();
 
-            throw_if(!$document, 'Documento não encontrado.');
+            $document = $user->documents()->find($id);
+
+            throw_if(
+                !$document,
+                'Documento não encontrado.'
+            );
 
             $document->delete();
 
@@ -145,73 +157,79 @@ class DocumentController extends Controller
         return $this->response;
     }
 
-
     /**
-     * Função para criar um documento Word e salvar como DOCX.
-     */
-    public function createDocument(array $data)
-    {
-        $phpWord = new PhpWord();
-        $section = $phpWord->addSection();
-
-        $section->addText("Nome do Usuário: {$data['user_name']}");
-        $section->addText("Cargo do Usuário: {$data['user_role']}");
-        $section->addText("Nome do Produto: {$data['product_brand']}");
-
-        $fileName = 'document_' . time() . '.docx';
-        $filePath = storage_path("app/documents/{$fileName}");
-        $phpWord->save($filePath, 'Word2007');
-
-        return "documents/{$fileName}";
-    }
-
-
-    /**
-     * Função auxiliar para converter um arquivo DOCX para PDF usando PHPWord.
-     */
-    private function convertDocxToPdf($docxPath, $pdfPath)
-    {
-        $phpWord = IOFactory::load($docxPath);
-
-        $pdfWriter = IOFactory::createWriter($phpWord, 'PDF');
-        $pdfWriter->save($pdfPath);
-    }
-
-
-    /**
-     * Método para download do documento, seja como DOCX ou PDF.
-     */
-    public function download($id, Request $request)
-    {
-        $document = Document::findOrFail($id);
-
-        $format = $request->query('format', 'pdf');
-        $filePath = $document->file_path;
-
-        if ($format === 'pdf') {
-            $pdfPath = str_replace('.docx', '.pdf', $filePath);
-            if (!Storage::exists($pdfPath)) {
-                $this->convertDocxToPdf(storage_path("app/{$filePath}"), storage_path("app/{$pdfPath}"));
-            }
-            $filePath = $pdfPath;
-        }
-
-        return response()->download(storage_path("app/{$filePath}"));
-    }
-
-
-    /**
-     * Substitui as variáveis de um template com os valores informados.
+     * Gera e baixa o documento no formato especificado.
      *
-     * @param string $content Conteúdo do template.
-     * @param array $data Valores a serem substituídos.
-     * @return string O conteúdo do template com as variáveis substituídas.
+     * @param string $id
+     * @param string $format
+     * @return \Illuminate\Http\Response
      */
-    private function replaceVariables($content, $data)
+    public function download($id, $format = 'docx')
+    {
+        try {
+            $user = $this->getUser();
+            $document = $user->documents()->find($id);
+
+            throw_if(
+                !$document,
+                'Documento não encontrado.'
+            );
+
+            if ($document->file_path && Storage::exists($document->file_path)) {
+                Storage::delete($document->file_path);
+                $document->file_path = null;
+            }
+
+            $templatePath = storage_path('app/templates/anexo1.docx');
+            if (!file_exists($templatePath)) {
+                throw new \Exception("Modelo de documento não encontrado.");
+            }
+
+            $templateProcessor = new TemplateProcessor($templatePath);
+            $this->replaceTemplateVariables($templateProcessor, $document->toArray());
+
+            $fileName = "document_{$id}";
+            $outputPath = "documents/{$fileName}";
+
+            // TODO: Resolver erros ao gerar arquivo em PDF
+            if ($format === 'pdf') {
+                $tempDocxPath = storage_path("app/documents/temp_{$fileName}.docx");
+                $templateProcessor->saveAs($tempDocxPath);
+
+                $outputPath .= ".pdf";
+                $pdf = Pdf::loadFile($tempDocxPath);
+                Storage::put($outputPath, $pdf->output());
+
+                unlink($tempDocxPath);
+            } else {
+                $outputPath .= ".docx";
+                $templateProcessor->saveAs(storage_path("app/{$outputPath}"));
+            }
+
+            $document->update(['file_path' => $outputPath]);
+
+            return Storage::download($outputPath, "{$fileName}.{$format}");
+        } catch (\Exception $e) {
+            return response()->json([
+                "error" => "Erro ao baixar o documento.",
+                "message" => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Substitui variáveis no template com os dados do documento.
+     *
+     * @param TemplateProcessor $templateProcessor
+     * @param Document $document
+     * @return void
+     */
+    private function replaceTemplateVariables(TemplateProcessor $templateProcessor, array $data)
     {
         foreach ($data as $key => $value) {
-            $content = str_replace('${' . $key . '}', $value, $content);
+            if (!is_null($value)) {
+                $templateProcessor->setValue($key, $value);
+            }
         }
-        return $content;
     }
 }

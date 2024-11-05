@@ -14,7 +14,9 @@ class DocumentController extends Controller
 
         $documents = $user->documents()->get();
 
-        return Inertia::render('Dashboard', ['documents' => $documents]);
+        return Inertia::render('Dashboard', [
+            'documents' => $documents
+        ]);
     }
 
     /**
@@ -36,10 +38,10 @@ class DocumentController extends Controller
 
         $document = $user->documents()->find($id);
 
-        throw_if(!$document, 'Document não encontrado.');
+        throw_if(!$document, 'Documento não encontrado.');
 
         return Inertia::render('Documents/Show', [
-            'document' => $document
+            'documentData' => $document
         ]);
     }
 

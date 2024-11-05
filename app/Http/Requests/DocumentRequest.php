@@ -23,6 +23,7 @@ class DocumentRequest extends FormRequest
     public function rules(): array
     {
         return [
+            "title" => "required|string|max:255",
             "user_name" => "required|string|max:255",
             "user_role" => "required|string|max:255",
             "user_document" => "required|string|max:255",
@@ -47,6 +48,7 @@ class DocumentRequest extends FormRequest
     public function messages(): array
     {
         return [
+            "title.required" => "O campo título é obrigatório",
             "user_name.required" => "O campo nome de usuário é obrigatório",
             "user_role.required" => "O campo cargo do usuário é obrigatório",
             "user_document.required" => "O campo documento do usuário é obrigatório",
@@ -72,6 +74,7 @@ class DocumentRequest extends FormRequest
     public function data(): array
     {
         $data = [
+            "title" => $this->input("title"),
             "user_name" => $this->input("user_name"),
             "user_role" => $this->input("user_role"),
             "user_document" => $this->input("user_document"),

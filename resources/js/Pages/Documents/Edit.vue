@@ -1,39 +1,31 @@
 <script setup>
-import { ref, onMounted } from "vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { useRoute } from "vue-router";
-import DocumentForm from "@/Pages/Documents/DocumentForm.vue";
-import axios from "@/axios";
 import { Head } from "@inertiajs/vue3";
+import DocumentForm from "@/Components/DocumentForm.vue";
+import ButtonBackDashboard from "@/Components/ButtonBackDashboard.vue";
+import Footer from "@/Components/Footer.vue";
 
-const route = useRoute();
-const documentData = ref(null);
-
-onMounted(async () => {
-    try {
-        const response = await axios.get(`/api/documents/${route.params.id}`);
-        documentData.value = response.data;
-    } catch (error) {
-        console.error("Erro ao buscar documento:", error);
-    }
+const props = defineProps({
+    documentData: Object,
 });
 </script>
 
 <template>
-    <Head title="Editar Documento" />
-
     <AuthenticatedLayout>
-
+        <Head title="Editar Documento" />
         <template #header>
-            <h2
-                class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200"
-            >
-                Editar Documento
-            </h2>
+            <div class="flex justify-start">
+                <ButtonBackDashboard />
+                <h2
+                    class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200 ml-2"
+                >
+                    Editar Documento
+                </h2>
+            </div>
         </template>
-        <div v-if="documentData">
-            <DocumentForm :documentData="documentData" :isEdit="true" />
-        </div>
-        <div v-else>Carregando...</div>
+
+        <DocumentForm :documentData="documentData" :isEdit="true" />
+
+        <Footer />
     </AuthenticatedLayout>
 </template>

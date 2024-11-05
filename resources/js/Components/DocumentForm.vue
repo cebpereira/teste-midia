@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted, Text } from "vue";
-import { useForm } from "@inertiajs/vue3";
+import { router, useForm } from "@inertiajs/vue3";
 import axios from "@/axios";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import InputError from "@/Components/InputError.vue";
@@ -36,7 +36,11 @@ const form = useForm({
 
 onMounted(() => {
     if (props.isEdit && props.documentData) {
-        form.fill(props.documentData);
+        for (const key in props.documentData) {
+            if (Object.hasOwnProperty.call(props.documentData, key)) {
+                form[key] = props.documentData[key];
+            }
+        }
     }
 });
 
@@ -48,12 +52,14 @@ const submit = async () => {
 
         if (props.isEdit) {
             await axios.put(
-                `/documents/edit/${props.documentData.document_id}`,
+                `/documents/update/${props.documentData.document_id}`,
                 form
             );
         } else {
             await axios.post("/documents/store", form);
         }
+
+        router.get("/dashboard");
     } catch (error) {
         console.error("Erro ao processar o documento:", error);
     }
@@ -239,7 +245,7 @@ const submit = async () => {
             <!-- Preço e Preço por extenso -->
             <div class="grid grid-cols-2 gap-4 mb-4">
                 <div>
-                    <InputLabel for="product_price" value="Preço" />
+                    <InputLabel for="product_price" value="Preço (R$)" />
                     <NumberInput
                         id="product_price"
                         v-model="form.product_price"
