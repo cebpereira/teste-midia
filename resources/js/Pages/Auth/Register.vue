@@ -1,22 +1,39 @@
 <script setup>
-import GuestLayout from '@/Layouts/GuestLayout.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import GuestLayout from "@/Layouts/GuestLayout.vue";
+import InputError from "@/Components/InputError.vue";
+import InputLabel from "@/Components/InputLabel.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import TextInput from "@/Components/TextInput.vue";
+import { Head, Link, useForm, router } from "@inertiajs/vue3";
 
 const form = useForm({
-    name: '',
-    email: '',
-    password: '',
-    password_confirmation: '',
+    name: "",
+    email: "",
+    password: "",
+    password_confirmation: "",
 });
 
-const submit = () => {
-    form.post(route('register'), {
-        onFinish: () => form.reset('password', 'password_confirmation'),
-    });
+const submit = async () => {
+    try {
+        const webResponse = await axios.post("/register", form);
+
+        const formLogin = {
+            email: form.email,
+            password: form.password,
+        }
+
+        const apiResponse = await axios.post("/api/auth/login", formLogin);
+
+        const token = apiResponse.data.token;
+
+        sessionStorage.setItem("auth_token", token);
+
+        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+        router.get("/dashboard");
+    } catch (error) {
+        console.error("Erro ao realizar login:", error);
+    }
 };
 </script>
 
