@@ -71,7 +71,7 @@ class DocumentRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function data(): array
+    public function documentData(): array
     {
         $data = [
             "title" => $this->input("title"),

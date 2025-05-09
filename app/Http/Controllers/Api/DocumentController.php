@@ -5,14 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DocumentRequest;
 use App\Models\Document;
-use App\Helpers\QueryHelper;
-use App\Http\Requests\Request;
 use Illuminate\Support\Facades\Storage;
-use PhpOffice\PhpWord\IOFactory;
-use PhpOffice\PhpWord\PhpWord;
-use PhpOffice\PhpWord\Shared\Html;
 use PhpOffice\PhpWord\TemplateProcessor;
-use Illuminate\Support\Facades\Response;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 class DocumentController extends Controller
@@ -23,7 +17,7 @@ class DocumentController extends Controller
     public function store(DocumentRequest $request)
     {
         try {
-            $data = $request->data();
+            $data = $request->documentData();
             $data['file_path'] = null;
 
             $document = Document::create($data);
@@ -107,7 +101,7 @@ class DocumentController extends Controller
     public function update(DocumentRequest $request, string $id)
     {
         try {
-            $data = $request->data();
+            $data = $request->documentData();
 
             $user = $this->getUser();
 
