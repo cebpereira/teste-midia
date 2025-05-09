@@ -2,18 +2,18 @@ setup:
 	@make build
 	@make up
 	@make composer-update
+	@make key
 	@make data
-    @make key
-    @make link
+	@make link
 
 build:
-	docker-compose build --no-cache --force-rm
+	docker compose build --no-cache --force-rm
 
 stop:
-	docker-compose stop
+	docker compose stop
 
 up:
-	docker-compose up -d
+	docker compose up -d
 
 composer-update:
 	docker exec teste-midia-site bash -c "composer update"
