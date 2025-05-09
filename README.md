@@ -56,15 +56,17 @@ Construção de sistema web como parte do teste técnico para a vaga de Desenvol
 * Navegar para a pasta do projeto:
     `cd teste-midia`
 
-* Copiar e configurar o .env:
+* Copiar o .env.example para o .env:
     `cp .env.example .env`
+
+* Configurar o .env com suas variáveis de ambiente como preferir:
+
+* No terminal de comando execute o `make setup` para executar todos os comandos de configuração:
 
 * Aguarde a execução do comando terminar, em caso de sucesso, os containers estarão ativos e o projeto estará rodando via localhost nas seguintes portas:
     * 8080 -> PhpMyAdmin
     * 3306 -> MySQL
     * 80 -> Apache
-
-* No terminal de comando execute o `make setup` para executar todos os comandos de configuração:
  
 * Utilize o comando abaixo no terminal do linux ou do WSL para entrar no terminal do apache:
     * `docker exec -it teste-midia-site bash`
@@ -90,6 +92,10 @@ Construção de sistema web como parte do teste técnico para a vaga de Desenvol
     > Unsupported config option for services: 'phpmyadmin'
     > Unsupported config option for networks: 'teste-midia-network'
     * ao utilizar o comando `make setup`, no arquivo `Makefile` altere os comandos de `docker-compose` para `docker compose`, isso deve resolver o erro.
+
+- Caso surja o erro:
+    > zsh: command not found: make
+    * utilize o comando `sudo apt install build-essential` ou simplesmente `sudo apt install make` no terminal para instalar o make
  
 > [!NOTE]
 > Em caso de sugestões, correções ou dúvidas:
